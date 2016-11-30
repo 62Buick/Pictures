@@ -1,4 +1,4 @@
-/* Revised 112216.001
+/* Revised 113016.001
 To compile use:
 g++ -Wall -lpthread -o picture_test picture_test.cpp -lpigpio -lrt -std=c++14
 
@@ -9,7 +9,13 @@ Location using visual references.
 Georeference with sun, moon, stars...
 Moving object identification and avoidance.
 
-In BMP files 184-202 is a date and time. YYYY:MM:DD HH:MM:SS.
+In JPG files 184-202 is a date and time. YYYY:MM:DD HH:MM:SS.
+
+BMP height and width is:
+Width is [20] * 256 + [19]
+Height is [24] * 256 + [23]
+RGB Data starts at offset [11]
+
 
 */
 
@@ -32,7 +38,7 @@ int main (void)
 {
   streampos size;
   char * memblock;
-  int c = 18;
+  int c = 0;
   char kchar;
 
   ifstream file ("pic.bmp", ios::in|ios::binary|ios::ate);
@@ -47,11 +53,19 @@ int main (void)
     cout << "The Size of the file is " << size  << endl;
     cin >> kchar;
     do {
+    cn = memblock[c];
+    lint = cn;
+    cout << lint << ", ";
     c += 1;
     cn = memblock[c];
     lint = cn;
-    cout << c << ", "<< cn << ", "<<lint<< endl;
-    } while  (c < 22);
+    cout << lint << ", ";
+    c += 1;
+    cn = memblock[c];
+    lint = cn;
+    cout << lint << endl;
+    c += 1;
+    } while  (c < 200);
 
     delete[] memblock;
   }
