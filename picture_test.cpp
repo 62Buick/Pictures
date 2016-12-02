@@ -40,6 +40,8 @@ int main (void)
   int c = 54;
   int width;
   int height;
+//  int w, h, rgb=3;
+//  int image1 [3280] [2464] [3];
 
   ifstream file ("pic.bmp", ios::in|ios::binary|ios::ate);
   if (file.is_open())
@@ -55,10 +57,20 @@ int main (void)
     cout << "The Size of the file is " << size  << endl;
     cout << "Width = " << width << endl;
     cout << "Height = " << height << endl;
+/*    for (c=54;c<=size;++c)
+        {for (w=0;w<width;++w)
+		{for (h=0;h<height;++h)
+			{for (rgb=0;rgb<3;++rgb)
+				{image1[w][h][rgb] = memblock[c];
+                                cout<< c;}
+                        } 
+                }
+        }*/
     do {
-    memblock[c] = 176;
+    memblock[c] = 5;
     c += 1;
-    } while  (c < 9000000);
+       } while  (c < 9000000);
+//  cout << image1 [3] [3] [3];
   }
   else cout << "Unable to open file";
 
