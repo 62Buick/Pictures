@@ -1,4 +1,4 @@
-/* Revised 120116.001
+/* Revised 120316.001
 To compile use:
 g++ -Wall -lpthread -o picture_test picture_test.cpp -lpigpio -lrt -std=c++14
 
@@ -40,8 +40,8 @@ int main (void)
   int c = 54;
   int width;
   int height;
-//  int w, h, rgb=3;
-//  int image1 [3280] [2464] [3];
+  int w, h, rgb=3;
+  int image1 [3280] [2464] [3];
 
   ifstream file ("pic.bmp", ios::in|ios::binary|ios::ate);
   if (file.is_open())
@@ -57,7 +57,7 @@ int main (void)
     cout << "The Size of the file is " << size  << endl;
     cout << "Width = " << width << endl;
     cout << "Height = " << height << endl;
-/*    for (c=54;c<=size;++c)
+    for (c=54;c<=size;++c)
         {for (w=0;w<width;++w)
 		{for (h=0;h<height;++h)
 			{for (rgb=0;rgb<3;++rgb)
@@ -65,12 +65,12 @@ int main (void)
                                 cout<< c;}
                         } 
                 }
-        }*/
+	}
     do {
     memblock[c] = 5;
     c += 1;
        } while  (c < 9000000);
-//  cout << image1 [3] [3] [3];
+  cout << image1 [3] [3] [2];
   }
   else cout << "Unable to open file";
 
