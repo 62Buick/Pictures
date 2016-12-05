@@ -1,4 +1,4 @@
-/* Revised 120316.001
+/* Revised 120516.001
 To compile use:
 g++ -Wall -lpthread -o picture_test picture_test.cpp -lpigpio -lrt -std=c++14
 
@@ -40,8 +40,9 @@ int main (void)
   int c = 54;
   int width;
   int height;
-  int w, h, rgb=3;
-  int image1 [3280] [2464] [3];
+  int h = 0, w = 0, rgb = 0;
+  int minr = 255, maxr = 0, ming = 255, maxg = 0, minb = 255, maxb = 0;
+  int midranger = 128, midrangeg = 128, midrangeb = 128;
 
   ifstream file ("pic.bmp", ios::in|ios::binary|ios::ate);
   if (file.is_open())
@@ -58,20 +59,35 @@ int main (void)
     cout << "Width = " << width << endl;
     cout << "Height = " << height << endl;
     for (c=54;c<=size;++c)
-        {for (w=0;w<width;++w)
-		{for (h=0;h<height;++h)
-			{for (rgb=0;rgb<3;++rgb)
-				{image1[w][h][rgb] = memblock[c];
-                                cout<< c;}
-                        } 
-                }
-	}
+	{for (rgb=0;rgb<3;++rgb)
+          {if (rgb == 0) 
+            {if (minr > memblock[c])
+		{minr = memblock[c];++c;}
+            }
+          }
+          {if (rgb == 1) 
+            {if (ming > memblock[c])
+		{ming = memblock[c];++c;}
+            }
+          }
+          {if (rgb == 2) 
+            {if (minb > memblock[c])
+		{minb = memblock[c];}
+            }
+          }
+        } 
+
+    cout << minr << ", " << ming << ", " << minb << endl;
+    cout << maxr << ", " << maxg << ", " << maxb << endl;
+    cout << midranger << ", " << midrangeg << ", " << midrangeb << endl;
+    cout << h << w << endl;
+    c = 54;
     do {
-    memblock[c] = 5;
+    memblock[c] = 126;
     c += 1;
        } while  (c < 9000000);
-  cout << image1 [3] [3] [2];
   }
+
   else cout << "Unable to open file";
 
   ofstream outfile ("pic1.bmp" , ios::out|ios::binary);
