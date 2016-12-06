@@ -54,38 +54,32 @@ int main (void)
     file.close();
     width = memblock[19] * 256 + memblock[18];
     height = memblock[23] * 256 + memblock[22];
-    cout << "the entire file content is in memory";
+    cout << "the entire file content is in memory" << endl;
     cout << "The Size of the file is " << size  << endl;
     cout << "Width = " << width << endl;
-    cout << "Height = " << height << endl;
-    for (c=54;c<=size;++c)
-	{for (rgb=0;rgb<3;++rgb)
-          {if (rgb == 0) 
-            {if (minr > memblock[c])
-		{minr = memblock[c];++c;}
-            }
-          }
-          {if (rgb == 1) 
-            {if (ming > memblock[c])
-		{ming = memblock[c];++c;}
-            }
-          }
-          {if (rgb == 2) 
-            {if (minb > memblock[c])
-		{minb = memblock[c];}
-            }
-          }
-        } 
+    cout << "Height = " << height << endl << endl << endl;
+
+    for (c=54;c<=74;c=c+3)
+	{if (minr > memblock[c])
+		{minr = memblock[c];cout<< c << ", " << minr;}
+        }
+        {if (ming > memblock[c+1])
+		{ming = memblock[c+1];cout<<c << ", " << ming;}
+        }
+        {if (minb > memblock[c+2])
+		{minb = memblock[c+2];cout<<c << ", " << minb << endl;}
+        };
+
 
     cout << minr << ", " << ming << ", " << minb << endl;
     cout << maxr << ", " << maxg << ", " << maxb << endl;
     cout << midranger << ", " << midrangeg << ", " << midrangeb << endl;
-    cout << h << w << endl;
+    cout << h << w << rgb << endl;
     c = 54;
     do {
     memblock[c] = 126;
     c += 1;
-       } while  (c < 9000000);
+       } while  (c < 900000);
   }
 
   else cout << "Unable to open file";
