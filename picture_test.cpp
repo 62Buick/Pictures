@@ -1,4 +1,4 @@
-/* Revised 120516.001
+/* Revised 120716.001
 To compile use:
 g++ -Wall -lpthread -o picture_test picture_test.cpp -lpigpio -lrt -std=c++14
 
@@ -37,12 +37,12 @@ streampos size;
 int main (void)
 {
   char * memblock;
-  int c = 54;
+  long c = 54;
   int width;
   int height;
-  int h = 0, w = 0, rgb = 0;
+  int h = 0, w = 0, r, g, b;
   int minr = 255, maxr = 0, ming = 255, maxg = 0, minb = 255, maxb = 0;
-  int midranger = 128, midrangeg = 128, midrangeb = 128;
+  long int avgr = 0, avgg = 0, avgb =0;
 
   ifstream file ("pic.bmp", ios::in|ios::binary|ios::ate);
   if (file.is_open())
@@ -55,26 +55,27 @@ int main (void)
     width = memblock[19] * 256 + memblock[18];
     height = memblock[23] * 256 + memblock[22];
     cout << "the entire file content is in memory" << endl;
-    cout << "The Size of the file is " << size  << endl;
+    cout << "The size of the file is " << size  << endl;
     cout << "Width = " << width << endl;
     cout << "Height = " << height << endl << endl << endl;
 
-    for (c=54;c<=74;c=c+3)
-	{if (minr > memblock[c])
-		{minr = memblock[c];cout<< c << ", " << minr;}
-        }
-        {if (ming > memblock[c+1])
-		{ming = memblock[c+1];cout<<c << ", " << ming;}
-        }
-        {if (minb > memblock[c+2])
-		{minb = memblock[c+2];cout<<c << ", " << minb << endl;}
+    for (c=54;c<=size;c=c+3)
+	{r = memblock[c];if (minr > r)
+		{minr = r;};
+        
+        g = memblock[c+1];if (ming > g)
+		{ming = g;};
+        
+        b = memblock[c+2];if (minb > b)
+		{minb = b;};
+        cout << r << g << b << endl;
         };
 
 
     cout << minr << ", " << ming << ", " << minb << endl;
     cout << maxr << ", " << maxg << ", " << maxb << endl;
-    cout << midranger << ", " << midrangeg << ", " << midrangeb << endl;
-    cout << h << w << rgb << endl;
+    cout << avgr << ", " << avgg << ", " << avgb << endl;
+    cout << h << w << endl;
     c = 54;
     do {
     memblock[c] = 126;
