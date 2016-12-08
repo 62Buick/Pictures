@@ -1,4 +1,4 @@
-/* Revised 120716.001
+/* Revised 120816.001
 To compile use:
 g++ -Wall -lpthread -o picture_test picture_test.cpp -lpigpio -lrt -std=c++14
 
@@ -59,27 +59,43 @@ int main (void)
     cout << "Width = " << width << endl;
     cout << "Height = " << height << endl << endl << endl;
 
-    for (c=54;c<=size;c=c+3)
-	{r = memblock[c];if (minr > r)
-		{minr = r;};
+    for (c = 54;c+3 <= size;c = c+3)
+	{r = memblock[c];
+                if (minr > r) {minr = r;}
+                if (maxr < r) {maxr = r;}
+                avgr = avgr + r;
+                        
+        g = memblock[c+1];
+                if (ming > g) {ming = g;}
+                if (maxg < g) {maxg = g;}
+                avgg = avgg + g;
         
-        g = memblock[c+1];if (ming > g)
-		{ming = g;};
-        
-        b = memblock[c+2];if (minb > b)
-		{minb = b;};
-        cout << r << g << b << endl;
+        b = memblock[c+2];
+                if (minb > b) {minb = b;}
+                if (maxb < b) {maxb = b;}
+                avgb = avgb + b;
         };
 
-
+    avgr = avgr / width / height;
+    avgg = avgg / width / height;
+    avgb = avgb / width / height;
+    cout << c << endl;
     cout << minr << ", " << ming << ", " << minb << endl;
     cout << maxr << ", " << maxg << ", " << maxb << endl;
     cout << avgr << ", " << avgg << ", " << avgb << endl;
     cout << h << w << endl;
+
+//  Update memblock to change colors;
     c = 54;
     do {
+    memblock[c] = r;
+    c += 1;
     memblock[c] = 126;
     c += 1;
+    memblock[c] = 255;
+    c += 1;
+    r += 1;
+    if ( r > 255) {r = 0;};
        } while  (c < 900000);
   }
 
