@@ -90,9 +90,9 @@ int main (void)
     do {
     memblock[c] = r;
     c += 1;
-    memblock[c] = 126;
+    memblock[c] = g;
     c += 1;
-    memblock[c] = 255;
+    memblock[c] = b;
     c += 1;
     r += 1;
     if ( r > 255) {r = 0;};
