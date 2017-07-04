@@ -1,4 +1,4 @@
-/* Revised 120816.001
+/* Revised 170704.001
 To compile use:
 g++ -Wall -lpthread -o picture_test picture_test.cpp -lpigpio -lrt -std=c++14
 
@@ -39,6 +39,9 @@ int main (void)
   char * memblock;
   long c = 54;
   int width;
+//  Activate this line to highlight a color range.  int rh, rl, gh, gl, bh, bl;
+  int xl, xh, yl, yh;  // range window 
+  int x = 0, y = 0; //Pixel coordinates
   int height;
   int h = 0, w = 0, r, g, b;
   int minr = 255, maxr = 0, ming = 255, maxg = 0, minb = 255, maxb = 0;
@@ -52,15 +55,11 @@ int main (void)
     file.seekg (0, ios::beg);
     file.read (memblock, size);
     file.close();
-    width = memblock[19] * 256 + memblock[18];
-    height = memblock[23] * 256 + memblock[22];
-    cout << "the entire file content is in memory" << endl;
-    cout << "The size of the file is " << size  << endl;
-    cout << "Width = " << width << endl;
-    cout << "Height = " << height << endl << endl << endl;
+    width = memblock[19] * 256 + 256 + memblock[18];
+    height = memblock[23] * 256 + 256 + memblock[22];
 
     for (c = 54;c+3 <= size;c = c+3)
-	{r = memblock[c];
+    	{r = memblock[c];
                 if (minr > r) {minr = r;}
                 if (maxr < r) {maxr = r;}
                 avgr = avgr + r;
@@ -79,24 +78,20 @@ int main (void)
     avgr = avgr / width / height;
     avgg = avgg / width / height;
     avgb = avgb / width / height;
-    cout << c << endl;
-    cout << minr << ", " << ming << ", " << minb << endl;
-    cout << maxr << ", " << maxg << ", " << maxb << endl;
-    cout << avgr << ", " << avgg << ", " << avgb << endl;
+//    cout << c << endl;
+//    cout << minr << ", " << ming << ", " << minb << endl;
+//    cout << maxr << ", " << maxg << ", " << maxb << endl;
+//    cout << avgr << ", " << avgg << ", " << avgb << endl;
     cout << h << w << endl;
 
 //  Update memblock to change colors;
     c = 54;
+    cin >> xl; cin >> xh; cin >> yl; cin >> yh;  
     do {
-    memblock[c] = r;
-    c += 1;
-    memblock[c] = g;
-    c += 1;
-    memblock[c] = b;
-    c += 1;
-    r += 1;
-    if ( r > 255) {r = 0;};
-       } while  (c < 900000);
+      if((y <= yl)||(y >= yh)||(x <= xl)||(x >= xh)){memblock[c] = 0;memblock[c+1] = 0;memblock[c+2] = 0;}
+      c += 3;x += 1;
+      if(x > width-1){x = 0; y += 1;}
+      } while  (c < size);
   }
 
   else cout << "Unable to open file";
