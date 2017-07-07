@@ -1,4 +1,4 @@
-/* Revised 170704.001
+/* Revised 120816.001
 To compile use:
 g++ -Wall -lpthread -o picture_test picture_test.cpp -lpigpio -lrt -std=c++14
 
@@ -38,13 +38,14 @@ int main (void)
 {
   char * memblock;
   long c = 54;
+  int pixelcount = 0;
   int width;
 //  Activate this line to highlight a color range.  int rh, rl, gh, gl, bh, bl;
   int xl, xh, yl, yh;  // range window 
   int x = 0, y = 0; //Pixel coordinates
   int height;
-  int h = 0, w = 0, r, g, b;
-  int minr = 255, maxr = 0, ming = 255, maxg = 0, minb = 255, maxb = 0;
+  int r, g, b;
+  int minr = 255, maxr = 1, ming = 255, maxg = 1, minb = 255, maxb = 1;
   long int avgr = 0, avgg = 0, avgb =0;
 
   ifstream file ("pic.bmp", ios::in|ios::binary|ios::ate);
@@ -58,43 +59,44 @@ int main (void)
     width = memblock[19] * 256 + 256 + memblock[18];
     height = memblock[23] * 256 + 256 + memblock[22];
 
-    for (c = 54;c+3 <= size;c = c+3)
-    	{r = memblock[c];
+//  Update memblock to update file colors;
+    c = 54;
+    cin >> xl; cin >> xh; cin >> yl; cin >> yh;  
+    do {
+      if((y <= yl)||(y >= yh)||(x <= xl)||(x >= xh))
+      {memblock[c] = 0;memblock[c+1] = 0;memblock[c+2] = 0;}
+        else {
+    	r = memblock[c]+128;
                 if (minr > r) {minr = r;}
                 if (maxr < r) {maxr = r;}
                 avgr = avgr + r;
                         
-        g = memblock[c+1];
+        g = memblock[c+1]+128;
                 if (ming > g) {ming = g;}
                 if (maxg < g) {maxg = g;}
                 avgg = avgg + g;
         
-        b = memblock[c+2];
+        b = memblock[c+2]+128;
                 if (minb > b) {minb = b;}
                 if (maxb < b) {maxb = b;}
                 avgb = avgb + b;
-        };
-
-    avgr = avgr / width / height;
-    avgg = avgg / width / height;
-    avgb = avgb / width / height;
-//    cout << c << endl;
-//    cout << minr << ", " << ming << ", " << minb << endl;
-//    cout << maxr << ", " << maxg << ", " << maxb << endl;
-//    cout << avgr << ", " << avgg << ", " << avgb << endl;
-    cout << h << w << endl;
-
-//  Update memblock to change colors;
-    c = 54;
-    cin >> xl; cin >> xh; cin >> yl; cin >> yh;  
-    do {
-      if((y <= yl)||(y >= yh)||(x <= xl)||(x >= xh)){memblock[c] = 0;memblock[c+1] = 0;memblock[c+2] = 0;}
+       pixelcount += 1;
+       };
+ 
       c += 3;x += 1;
       if(x > width-1){x = 0; y += 1;}
       } while  (c < size);
   }
 
   else cout << "Unable to open file";
+
+    avgr = avgr / pixelcount;
+    avgg = avgg / pixelcount;
+    avgb = avgb / pixelcount;
+    cout << "Minimum RGB " << minr << ", " << ming << ", " << minb << endl;
+    cout << "Maximum RGB " << maxr << ", " << maxg << ", " << maxb << endl;
+    cout << "Average RGB " << avgr << ", " << avgg << ", " << avgb << endl;
+    cout << "Pixel Count, Width, Height " << pixelcount << ", " << width << ", " << height << endl;
 
   ofstream outfile ("pic1.bmp" , ios::out|ios::binary);
   outfile.write (memblock,size);
