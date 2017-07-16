@@ -1,4 +1,4 @@
-/* Revised 120816.001
+/* Revised 170716.001
 To compile use:
 g++ -Wall -lpthread -o picture_test picture_test.cpp -lpigpio -lrt -std=c++14
 
@@ -15,6 +15,8 @@ BMP height and width is:
 Width is [19] * 256 + [18]
 Height is [23] * 256 + [22]
 RGB Data starts at offset [10]
+
+The dewalt yellow has an RGB average of 129, 181, 125
 
 
 */
