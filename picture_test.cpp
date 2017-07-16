@@ -1,4 +1,4 @@
-/* Revised 170716.001
+/* Revised 170716.002
 To compile use:
 g++ -Wall -lpthread -o picture_test picture_test.cpp -lpigpio -lrt -std=c++14
 
@@ -58,8 +58,10 @@ int main (void)
     file.seekg (0, ios::beg);
     file.read (memblock, size);
     file.close();
-    width = memblock[19] * 256 + 256 + memblock[18];
-    height = memblock[23] * 256 + 256 + memblock[22];
+    width = memblock[19] * 256 + memblock[18];// For pi;
+    height = memblock[23] * 256 + memblock[22];// For pi;
+//    width = memblock[19] * 256 + 256 + memblock[18];//For laptop;
+//    height = memblock[23] * 256 + 256 + memblock[22];// For laptop;
 
 //  Update memblock to update file colors;
     c = 54;
@@ -68,17 +70,20 @@ int main (void)
       if((y <= yl)||(y >= yh)||(x <= xl)||(x >= xh))
       {memblock[c] = 0;memblock[c+1] = 0;memblock[c+2] = 0;}
         else {
-    	r = memblock[c]+128;
+//    	r = memblock[c]+128;// For Laptop;
+    	r = memblock[c];// For pi;
                 if (minr > r) {minr = r;}
                 if (maxr < r) {maxr = r;}
                 avgr = avgr + r;
                         
-        g = memblock[c+1]+128;
+//      g = memblock[c+1]+128;// For Laptop;
+        g = memblock[c+1];//For pi;
                 if (ming > g) {ming = g;}
                 if (maxg < g) {maxg = g;}
                 avgg = avgg + g;
         
-        b = memblock[c+2]+128;
+//      b = memblock[c+2]+128;//For Laptop;
+        b = memblock[c+2];//For pi;
                 if (minb > b) {minb = b;}
                 if (maxb < b) {maxb = b;}
                 avgb = avgb + b;
